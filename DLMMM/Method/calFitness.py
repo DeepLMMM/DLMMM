@@ -4,6 +4,7 @@ import math
 
 import numpy
 import numpy as np
+import scipy.stats
 
 from .flatMap import toFlatMap
 from DataStruct.globalConfig import GlobalConfig
@@ -14,9 +15,8 @@ def cal_fitness_value(matrix):
     V = np.std(thismatrix, axis=0)
 
     '''计算冲突性'''
-    A2 = numpy.transpose(thismatrix)  # 矩阵转置
-    r = np.corrcoef(A2)  # 求皮尔逊相关系数
-    # 如果数据全都相同，那么皮尔逊相关系数为NaN，这时证明这个error一点新的信息没有，不往下计算了，error_score直接返回0.
+    r = scipy.stats.spearmanr(thismatrix, axis=0).correlation  # 求Spearman相关系数
+    # 如果数据全都相同，那么Spearman相关系数为NaN，这时证明这个error一点新的信息没有，不往下计算了，error_score直接返回0.
     if numpy.isnan(r).any():
         return 0.0
 
@@ -27,7 +27,7 @@ def cal_fitness_value(matrix):
 
     '''计算权重'''
     w = C / np.sum(C)
-    #注：当所有数值均为0.0时，皮尔逊相关系数均为1，此时信息承载量C为NaN，直接返回error_score为1即可。(赋值0而非1是为了保持算法稳定性，因为全是相同的极小量时会归一化到1.0)
+    #注：当所有数值均为0.0时，Spearman相关系数均为1，此时信息承载量C为NaN，直接返回error_score为1即可。(赋值0而非1是为了保持算法稳定性，因为全是相同的极小量时会归一化到1.0)
     if numpy.isnan(w).any():
         return 1.0
 
@@ -93,7 +93,7 @@ def exe_calculate():
     # print("本轮fps_score为:"+str(fps_score))
     # print("本轮complexity_score为:"+str(complexity_score))
     # print("本轮error_score为:"+str(error_score))
-    print("本轮fitness为:"+str(fitness))
+    # print("本轮fitness为:"+str(fitness))
     # print("random模式fitness不反馈")
     return fitness
     # return 1.0

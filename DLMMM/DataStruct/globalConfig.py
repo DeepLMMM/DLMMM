@@ -19,7 +19,7 @@ class GlobalConfig:
     P = Population()  # 初始种群
     Q = GenetypeQueue()  # controller选出的队列
     error_cal_mode = "max"#误差计算方式（只有max）
-    initMutateTime = 1000 # 初始化操作中执行突变的最大次数
+    initMutateTime = 10 # 初始化操作中执行突变的最大次数
     final_module = [] # 扁平图中节点之间的所有算子。
     channels = [] # 各节点的通道数。
     dataset = 'random'#所使用的数据集，包含random,cifar10,mnist,fashion_mnist,imagenet,sinewave and price.共七种。
